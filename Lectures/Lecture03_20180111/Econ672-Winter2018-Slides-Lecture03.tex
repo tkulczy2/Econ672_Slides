@@ -1,0 +1,140 @@
+\documentclass[fleqn, 10pt]{beamer}
+
+
+\title[Econ-672]{Economics 672: Econometric Analysis II \\ Winter 2018}
+\author[M. Cattaneo]{Matias Cattaneo \\
+        Department of Economics \\
+        University of Michigan \\
+        Authored collaboratively by PhD entering class of 2017
+        }
+\date{January 11, 2018}
+
+\usetheme{AnnArbor}
+\usecolortheme{wolverine}
+
+\setbeamertemplate{footline}
+{%
+  \begin{beamercolorbox}{section in head/foot}
+	\hspace{1em} \insertshortauthor \hfill \insertshorttitle \hfill \insertdate \hspace{1cm} \insertframenumber /  \inserttotalframenumber \hspace{1em}
+  \end{beamercolorbox}%
+}
+
+
+
+
+\usepackage{hyperref}
+\usepackage{import}
+\usepackage{caption}
+\captionsetup{labelformat=empty,labelsep=none}
+\usepackage{amsmath}
+\setlength{\mathindent}{0.5 em}
+\usepackage{wrapfig}
+\usepackage{comment}
+\usepackage{listings}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{setspace}
+%\usepackage{doc}
+%\usepackage[caption=false]{subfig}
+
+
+\usebeamercolor{structure}
+\usebeamercolor{frametitle}
+%\setbeamercolor{block title}{bg=\color{structure.fg}, fg=black}
+
+\lstset{basicstyle= \ttfamily \scriptsize, frame=trbl, backgroundcolor=\color{frametitle.bg},rulecolor=\color{structure.fg}}
+\usepackage{xcolor}
+
+\def\lst{\lstinline}
+
+\newcommand{\com}[1]{{\footnotesize\texttt{#1}}}
+
+\hypersetup{
+    bookmarks=true,                 % show bookmarks bar?
+    unicode=false,                  % non-Latin characters in bookmarks
+    pdftoolbar=true,                % show toolbar?
+    pdfmenubar=true,                % show menu?
+    pdffitwindow=true,              % window fit to page when opened
+    pdfstartview={FitH},            % fits the width of the page to the window
+    pdftitle={},                    % title
+    pdfauthor={Jamie Fogel},        % author
+    pdfnewwindow=true,              % links in new window
+    colorlinks=true,                % false: boxed links; true: colored links
+    linkcolor=blue,                 % color of internal links
+    citecolor=black,                % color of links to bibliography
+    filecolor=magenta,              % color of file links
+    urlcolor=blue,                  % color of external links
+    breaklinks=true
+}
+
+\AtBeginSection[]
+{
+	\begin{frame}<beamer>
+		\frametitle{Outline}
+		\tableofcontents[currentsection]
+	\end{frame}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{frame}[plain]
+    \titlepage
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{[Intro Heading]}
+    \begin{enumerate}
+		\item Intro item 1
+		\item Intro item 2
+	\end{enumerate}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{[Major Topic]}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Topic Heading}
+
+    \begin{itemize}
+		\item Topic point a
+		\item Topic point b
+	\end{itemize}
+	Topic summary sentence.
+	
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Next Lecture: Topics and Readings}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Next Class Topics and Readings}
+	
+	\begin{itemize}
+		\item \underline{Problem Set \#}
+		\item Next topic: blah blah blah
+		\item \textbf{Readings:}
+		\begin{enumerate}
+			\item books
+			\item more books
+		\end{enumerate}
+	\end{itemize}
+	
+\end{frame}
+
+
+\end{document}
+
+
+
+
+
+

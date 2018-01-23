@@ -1,0 +1,4 @@
+\beamer@sectionintoc {1}{Introduction}{2}{0}{1}
+\beamer@sectionintoc {2}{Review of SLRM}{4}{0}{2}
+\beamer@sectionintoc {3}{Finite Sample Distributional Results}{8}{0}{3}
+\beamer@sectionintoc {4}{Next Lecture: Topics and Readings}{12}{0}{4}

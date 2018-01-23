@@ -1,0 +1,240 @@
+\documentclass[fleqn, 10pt]{beamer}
+
+
+\title[Econ-672]{Economics 672: Econometric Analysis II \\ Winter 2018}
+\author[M. Cattaneo]{Matias Cattaneo \\
+        Department of Economics \\
+        University of Michigan \\
+        Authored collaboratively by PhD entering class of 2017
+        }
+\date{January 18, 2018}
+
+\usetheme{AnnArbor}
+\usecolortheme{wolverine}
+
+\setbeamertemplate{footline}
+{%
+  \begin{beamercolorbox}{section in head/foot}
+	\hspace{1em} \insertshortauthor \hfill \insertshorttitle \hfill \insertdate \hspace{1cm} \insertframenumber /  \inserttotalframenumber \hspace{1em}
+  \end{beamercolorbox}%
+}
+
+
+
+
+\usepackage{hyperref}
+\usepackage{import}
+\usepackage{caption}
+\captionsetup{labelformat=empty,labelsep=none}
+\usepackage{amsmath}
+\setlength{\mathindent}{0.5 em}
+\usepackage{wrapfig}
+\usepackage{comment}
+\usepackage{listings}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{setspace}
+%\usepackage{doc}
+%\usepackage[caption=false]{subfig}
+
+
+\usebeamercolor{structure}
+\usebeamercolor{frametitle}
+%\setbeamercolor{block title}{bg=\color{structure.fg}, fg=black}
+
+\lstset{basicstyle= \ttfamily \scriptsize, frame=trbl, backgroundcolor=\color{frametitle.bg},rulecolor=\color{structure.fg}}
+\usepackage{xcolor}
+
+\def\lst{\lstinline}
+
+\newcommand{\com}[1]{{\footnotesize\texttt{#1}}}
+
+\hypersetup{
+    bookmarks=true,                 % show bookmarks bar?
+    unicode=false,                  % non-Latin characters in bookmarks
+    pdftoolbar=true,                % show toolbar?
+    pdfmenubar=true,                % show menu?
+    pdffitwindow=true,              % window fit to page when opened
+    pdfstartview={FitH},            % fits the width of the page to the window
+    pdftitle={},                    % title
+    pdfauthor={Jamie Fogel},        % author
+    pdfnewwindow=true,              % links in new window
+    colorlinks=true,                % false: boxed links; true: colored links
+    linkcolor=blue,                 % color of internal links
+    citecolor=black,                % color of links to bibliography
+    filecolor=magenta,              % color of file links
+    urlcolor=blue,                  % color of external links
+    breaklinks=true
+}
+
+\AtBeginSection[]
+{
+	\begin{frame}<beamer>
+		\frametitle{Outline}
+		\tableofcontents[currentsection]
+	\end{frame}
+}
+
+\newcommand{\p}{\mathbb{P}}
+\newcommand{\Cov}{\mathbb{C}ov}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\V}{\mathbb{V}}
+\newcommand{\indep}{\rotatebox[origin=c]{90}{$\models$}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{frame}[plain]
+    \titlepage
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Introduction}
+    \begin{itemize}
+		\item Last lecture:
+	    \begin{itemize}
+			\item Intro to Least Squares
+			\item Gauss-Markov Theorem
+		\end{itemize}
+		\item This lecture:
+		\begin{itemize}
+			\item Finite sample results
+			\item Basic inference
+		\end{itemize}
+	\end{itemize}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Review of SLRM}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Standard Linear Regression Model (SLRM)}
+
+    \begin{itemize}
+    	\item Consider \( X \in \mathbb{R}^{n\times d} \) and \( y \in \mathbb{R}^{n} \)
+		\item The standard assumptions can be written as:
+		\[ \E[y|X] = X \beta_0, \V[y|X] = \sigma_0^2 \mathbf{I}_n \]
+		\item The least squares estimator of \(\beta_0\) is then:
+		\[ \hat{\beta} = \arg\min_{\beta} \left\Vert y - X \beta \right\Vert^2 = (X'X)^{-}X'y \]
+		\item With associated predicted values \( \hat{y} = P_{X} y \) and \( \hat{\varepsilon} = (I - P_{X})y = M_{X} y \)
+		\begin{itemize}
+			\item Where \( P_{X} = X(X'X)^{-}X' \), and \((\cdot)^-\) denotes the generalized inverse.
+		\end{itemize}
+	\end{itemize}
+	
+\end{frame}
+
+
+\begin{frame}{Estimating the Variance}
+	
+	\begin{itemize}
+		\item Note that we can write the sum of squared residuals as:
+		\begin{align*}
+		\left\Vert \hat{\varepsilon} \right\Vert^2 &= \left[ \sqrt{ \sum_{i=1}^{n} \hat{\varepsilon}_i^2 } \right]^2 = \sum_{i=1}^{n} \hat{\varepsilon}_i^2 = \hat{\varepsilon}' \hat{\varepsilon} = \left( M_{X}y  \right)' \left(M_{X} y \right) \\
+			&= \left( M_{X}(X\hat{\beta} + \varepsilon)  \right)' \left(M_{X} (X\hat{\beta} + \varepsilon) \right) = \left( M_{X} \varepsilon  \right)' \left(M_{X} \varepsilon \right) \\
+			&= \varepsilon'M_{X}'M_{X}\varepsilon = \varepsilon'M_{X}\varepsilon = \varepsilon'(I-P_{X})\varepsilon
+		\end{align*}
+		\item Here we used the fact that \(M_{X}\) is the orthogonal projection matrix (hence \(M_{X}X = \mathbf{0}\)) and is symmetric and idempotent.
+	\end{itemize}
+	
+\end{frame}
+
+
+\begin{frame}{Estimating the Variance}
+	
+	\begin{itemize}
+		\item Taking the expectation gives a useful result:
+		\begin{align*}
+		\E[\left\Vert \hat{\varepsilon} \right\Vert^2 | X] &= \E[ \varepsilon'(I-P_{X})\varepsilon | X] = \E\left[ tr\left( \varepsilon'(I-P_{X})\varepsilon \right) | X\right] \\
+			&= \E\left[ tr\left( (I-P_{X})\varepsilon\varepsilon' \right) | X\right] = tr\left(  (I-P_{X}) \E\left[ \varepsilon\varepsilon' | X\right] \right) \\
+			&= tr\left(  I-P_{X} \right) \sigma_0^2 = (n-d)\sigma_0^2
+		\end{align*}
+		\item Here we used the fact that the trace operator is order invariant and linear.
+		\item This result means that an unbiased estimator of \(\sigma_0^2\) is given by:
+		\[ s^2 = \frac{\left\Vert \hat{\varepsilon} \right\Vert^2}{n-d} = \frac{1}{n-d} \sum_{i=1}^{n} \hat{\varepsilon}_i^2 \]
+	\end{itemize}
+	
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Finite Sample Distributional Results}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Adding Normality}
+	
+	\begin{itemize}
+		\item Adding the assumption that \( y|X \sim \mathcal{N}\left( X\beta_0, \sigma_0^2 \mathbf{I}_n \right) \) allows us to derive several useful distributional results.
+		\item Using that \( \E[\hat{y}|X] = X\beta_0 \) and \( \V[\hat{y}|X] = \sigma_0^2 P_{X} \), we can use the fact that \(\hat{y}\) is a linear combination of normally distributed random variables to deduce that:
+		\[ \hat{y}|X \sim \mathcal{N}(X\beta_0, \sigma_0^2 P_{X}) \]
+		\item Similarly, we have:
+		\[ \hat{\varepsilon}|X \sim \mathcal{N}(\mathbf{0}, \sigma_0^2 (I-P_{X})) \]
+	\end{itemize}
+	
+\end{frame}
+
+
+\begin{frame}{Adding Normality}
+	
+	\begin{itemize}
+		\item We can write the variance estimator as:
+		\[ s^2 = \frac{\sigma_0^2}{n-d} \frac{1}{\sigma_0} \varepsilon' (I-P_{X}) \varepsilon \frac{1}{\sigma_0} \]
+		\item Since \(I-P_{X}\) is symmetric, we can use a singluar value decomposition to write it as \( I - P_{X} = U \Lambda U \), where \(\Lambda \) is an \(n\times n\) diagonal matrix of eigenvalues (\(n-d\) of which are 1 and \(d\) of which are 0) while \(U\) is an orthogonal matrix.
+		\item This brings us to the following result:
+		\[ s^2 = \frac{\sigma_0^2}{n-d} \left[ \frac{1}{\sigma_0} U' \varepsilon \right]' \Lambda \left[ \frac{1}{\sigma_0} U' \varepsilon \right] \implies s^2|X \sim \frac{\sigma_0^2}{n-d} \chi^2_{n-d} \]
+		\item Here, \( \frac{1}{\sigma_0}U'\varepsilon \sim \mathcal{N}(\mathbf{0},\mathbf{I}_n) \), and the specific form of \(\Lambda \) means that we are summing \(n-d\) squares of standard normal random variables, yielding the Chi-square distribution (with corresponding d.o.f.)
+	\end{itemize}
+	
+\end{frame}
+
+
+\begin{frame}{Inference}
+	
+	\begin{itemize}
+		\item Consider the following hypothesis:
+		\[ \mathrm{H}_0: A' \beta = a, A \in \mathbb{R}^{d\times r} \]
+		\item And the following statistics:
+		\[ T_1 = \frac{[A'\hat{\beta}-a]'(A'(X'X)^{-1}A)^{-1}[A'\hat{\beta}-a]}{\sigma_0^2} \sim \chi^2_{r}, T_2 = \frac{\hat{\varepsilon}'\hat{\varepsilon}}{\sigma_0^2} \sim \chi^2_{n-d} \]
+		\item Normality allows us to conclude that \( T_1 \indep T_2 \)
+		\item Then, taking the ratio of independent chi-square random variables gives another well known distribution:
+		\[ F = \frac{T_1 / r}{T_2 / (n-d)} \sim \mathcal{F}_{r,n-d} \]
+		\item In the case \(r=1\), we have \( F = (T_{n-d})^2 \)
+		
+	\end{itemize}
+	
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Next Lecture: Topics and Readings}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Next Class Topics and Readings}
+	
+	\begin{itemize}
+		\item \underline{Problem Set \#}
+		\item Next topic: blah blah blah
+		\item \textbf{Readings:}
+		\begin{enumerate}
+			\item books
+			\item more books
+		\end{enumerate}
+	\end{itemize}
+	
+\end{frame}
+
+
+\end{document}
+
+
+
+
+
+
