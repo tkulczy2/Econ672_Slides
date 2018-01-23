@@ -26,7 +26,6 @@ After you have done your first `git clone`, follow these general steps to add yo
 #### Mac/Linux/general command line
 
 * Before you start editing files, *always* do `git pull` first to make sure that you have incorporated changes that other people have already made. You have to be in the "Econ672_Slide" directory when you do this.
-  - If you are using the Git for Windows GUI, instead of doing `git pull` at the command line you will need to select `Remote > Fetch from > origin` (hit "Okay" or "Continue" in the dialog boxes) and then `Merge > Local merge` (hit "Okay" or "Continue" in the dialog boxes)
 * Edit the files as you normally would
 * If you create any new files or folders that you want everyone else to have access to, you need to do `git add [filename]` for each one.
 * After you have added your new files, you can do `git status` to view information about the changes you have made
