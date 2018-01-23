@@ -3,8 +3,6 @@ Slides composed of material presented in lecture by Matias Cattaneo during Winte
 
 ## Getting started with git
 
-These instructions assume you are using a command line. If you have Windows, you might prefer to use the graphical interface, in which case the commands should have an intuitive counterpart (but I don't know exactly how to use the graphical interface--ask and I can help you figure it out).
-
 ### Installation and setup
 
 If you have never used git before, start by following the installation instructions here (Mac OS X may already have git installed):
