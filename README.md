@@ -61,7 +61,9 @@ https://codio.com/docs/ide/editing/git/git-primer/
 
 ### Windows GUI
 
+This seemse like a decent resource for doing basic stuff on Windows:
 
+https://code.tutsplus.com/tutorials/git-on-windows-for-newbs--net-25847
 
 ## If git is too much trouble at the moment...
 
