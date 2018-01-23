@@ -1,5 +1,5 @@
 # Econ672_Slides
-Slides composed of material presented in lecture
+Slides composed of material presented in lecture by Matias Cattaneo during Winter 2018
 
 ## Getting started with git
 
