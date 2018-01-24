@@ -46,7 +46,7 @@ After you have done your first `git clone`, follow these general steps to add yo
   - `Commit` saves all of your changes (other people still can't see them though)
   - `Push` sends your changes to the repository on the cloud so others can see/use them (you will need to enter your github username and password after this).
 
-## If you want more info
+## Want to learn more?
 
 There are tons of other tutorials. Using git is very helpful for managing code, so it's good to start learning it now!
 
@@ -55,6 +55,10 @@ There are tons of other tutorials. Using git is very helpful for managing code, 
 This website has a decent (brief) explanation of what git does, and what each of the commands mean:
 
 https://codio.com/docs/ide/editing/git/git-primer/
+
+This website explains how to configure git so that you don't have to enter your github username and password every time you push changes to the repo (you might need to remove "-user1" everywhere in these instructions, and don't enter a password after `ssh-keygen`):
+
+https://www.keybits.net/post/automatically-use-correct-ssh-key-for-remote-git-repo/
 
 ### Windows GUI
 
