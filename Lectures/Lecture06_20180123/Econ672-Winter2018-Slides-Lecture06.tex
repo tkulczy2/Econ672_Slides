@@ -9,8 +9,8 @@
         }
 \date{January 23, 2018}
 
-%\usetheme{AnnArbor}
-%\usecolortheme{wolverine}
+\usetheme{AnnArbor}
+\usecolortheme{wolverine}
 
 \setbeamertemplate{footline}
 {%
@@ -75,6 +75,12 @@
 	\end{frame}
 }
 
+\newcommand{\p}{\mathbb{P}}
+\newcommand{\Cov}{\mathbb{C}ov}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\V}{\mathbb{V}}
+\newcommand{\indep}{\rotatebox[origin=c]{90}{$\models$}}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -89,28 +95,167 @@
 \section{Introduction}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}{[Intro Heading]}
-    \begin{enumerate}
-		\item Intro item 1
-		\item Intro item 2
-	\end{enumerate}
+\begin{frame}{Introduction}
+    \begin{itemize}
+	\item Last lecture
+	    \begin{itemize}
+			\item Least squares finite sample properties
+		\end{itemize}
+	\item This lecture
+	    \begin{itemize}
+			\item Generalized Least Squares (finite sample)
+			\item Partitioned Regression (actually presented in Lecture 8)
+			\item Least Squares Asymptotics
+		\end{itemize}
+	\end{itemize}
+
 \end{frame}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{[Major Topic]}
+\section{Generalized Least Squares}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}{Topic Heading}
+\begin{frame}{GLS Assumptions}
 
     \begin{itemize}
-		\item Topic point a
-		\item Topic point b
+		\item We maintain the assumptions that the CEF as linear in parameters, \(X\) is full rank, and the errors are exogenous, but relax the assumption of homoskedasticity.
+		\item The model is:
+		\[ y = X\beta + \varepsilon \]
+		\item But instead of \( \V[y|X] = \sigma_0^2 I_n \), we assume \( \V[y|X] = \Omega_0 \)
+		\item The simplest version of this assumes that \( \Omega_0 \) is a diagonal matrix with elements \( \sigma_i^2 \), but in general it can be any (symmetric!) matrix.
+%		\item In the following, we assume:
+%		\begin{equation*}
+%		\Omega_0 =
+%		\begin{bmatrix}
+%			\sigma_1^2 & & \makebox(0,0){\text{\huge0}} \\
+%			& \ddots & \\
+%			\text{\huge0} & & \sigma_n^2 
+%		\end{bmatrix}
+%		\end{equation*}
 	\end{itemize}
-	Topic summary sentence.
 	
 \end{frame}
 
+\begin{frame}{GLS as WLS}
+	
+	\begin{itemize}
+		\item The GLS estimator is defined as the minimizer of the following objective function:
+		\begin{align*}
+		\left\Vert y - X \beta \right\Vert^2_{\Omega_0^{-1}} = (y - X\beta)' \Omega_0^{-1} (y-X\beta)
+		\end{align*}
+		\item If \(\Omega_0 \) is diagonal, this can be written as:
+		\[ \sum_{i=1}^{n} \sigma_i^{-2} (y_i - x_i' \beta)^2 \]
+		\item Here we can see an example of how GLS is a specific case of WLS, in which we are simply using the conditional VCV matrix of \(y\) as the weights (assuming it is known).
+	\end{itemize}
+	
+\end{frame}
+
+\begin{frame}{GLS as transformed OLS}
+	
+	\begin{itemize}
+		\item The objective function can also be written as:
+		\begin{align*}
+		(y - X\beta)' \Omega_0^{-1} (y-X\beta) = \varepsilon' \Omega_0^{-1} \varepsilon = (\Omega_0^{-\frac{1}{2}}\varepsilon)' (\Omega_0^{-\frac{1}{2}}\varepsilon)
+		\end{align*}
+		\item We can think of this as minimizing the residuals of a transformed model:
+		\begin{align*}
+		\Omega_0^{-\frac{1}{2}} y &= \Omega_0^{-\frac{1}{2}} X \beta + \Omega_0^{-\frac{1}{2}} \varepsilon \\
+		\tilde{y} &= \tilde{X} \beta + \tilde{\varepsilon}
+		\end{align*}
+	\end{itemize}
+	
+\end{frame}
+
+\begin{frame}{GLS and Gauss-Markov}
+	
+	\begin{itemize}
+		\item The GLS estimator is simply the OLS estimator of the transformed model:
+		\[ \hat{\beta}_{GLS} = \left( \tilde{X}'\tilde{X} \right)^{-1} \tilde{X}' \tilde{y} = \left( X' \Omega_0^{-1} X \right)^{-1} X' \Omega_0^{-1} y \]
+		\item Furthermore, in the transformed model we have:
+		\[ \V[\tilde{y}|X] = \Omega_0^{-\frac{1}{2}} \V[y|X] \Omega_0^{-\frac{1}{2}} = \Omega_0^{-\frac{1}{2}} \Omega_0 \Omega_0^{-\frac{1}{2}} = I_n \]
+		\item Which means that the Gauss-Markov assumption of spherical errors is satisfied by the transformed model, and therefore that the GSL estimator is the BLU estimator of \(\beta\)
+	\end{itemize}
+	
+\end{frame}
+
+\begin{frame}{Feasible GLS}
+	
+	\begin{itemize}
+		\item If \( \Omega_0 \) is not actually known, then the GSL estimator is not feasible (we can't actually compute it).
+		\item This suggests a two-step procedure, where we first estimate \( \Omega_0 \) with the data, and then plug in the this estimate for form a feasible GLS (or FGLS) estimator of \( \beta \).
+		\item We can, for example, use LS to construct \( \hat{\Omega} \), and then the FGLS estimator is:
+		\[ \hat{\beta}_{FGLS} = \left( X' \hat{\Omega}_0^{-1} X \right)^{-1} X' \hat{\Omega}_0^{-1} y \]
+		\item This process can be iterated but updating our estimate of \( \Omega_0 \) in each stage, and using this estimate to calculate the FGLS estimate or \(\beta \) in the next stage
+		\item If repeated ad infinitum, this results in what is known as the Continuously Updated GMM Estimator.
+	\end{itemize}
+	
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Least Squares Asymptotics}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Asymptotics}
+	
+	\begin{itemize}
+		\item Drop the assumption of Gaussianity (i.e. that \( y|X \sim \mathcal{N}(X\beta_0, \sigma_0^2 I_n) \))
+		\item Add the assumption that \( \{ (y_i, x_i) : 1 \leq i \leq n \} \) are i.i.d.
+		\item Write the LS estimator as:
+		\[ \hat{\beta} = \left( \frac{1}{n} \sum_{i=1}^{n} x_i x_i' \right)^{-1} \left( \frac{1}{n} \sum_{i=1}^{n} x_i y_i \right) = \beta_0 + \left( \frac{1}{n} \sum_{i=1}^{n} x_i x_i' \right)^{-1} \left( \frac{1}{n} \sum_{i=1}^{n} x_i \varepsilon_i \right) \]
+		\item We can see that the expressions in parentheses are averages of i.i.d. random vectors, so under a suitable LLN they should converge to their expectations, which we can write as:
+		\[ \left( \frac{1}{n} \sum_{i=1}^{n} x_i x_i' \right) = \frac{X'X}{n} \to_p \E[x_i x_i'], \;\; \left( \frac{1}{n} \sum_{i=1}^{n} x_i \varepsilon_i \right) = \frac{X'\varepsilon}{n} \to_p \E[x_i \varepsilon_i] \]
+	\end{itemize}
+	
+\end{frame}
+
+\begin{frame}{Note on Exogeneity Assumptions}
+	
+	\begin{itemize}
+		\item The strongest form of exogeneity is:
+		\begin{align} \label{exog1}
+		\varepsilon_i \indep x_i
+		\end{align}
+		\item The 2nd form of exogeneity is:
+		\begin{align} \label{exog2}
+		\Cov[\varepsilon_i | x_i] = 0
+		\end{align}
+		\item The weakest form of exogeneity is:
+		\begin{align} \label{exog3}
+		\E[x_i \varepsilon_i] = 0
+		\end{align}
+		\item In general \eqref{exog1} \( \Rightarrow \) \eqref{exog2} \( \Rightarrow \) \eqref{exog3} (not the other way around!)
+	\end{itemize}
+	
+\end{frame}
+
+\begin{frame}{Asymptotics}
+	
+	\begin{itemize}
+		\item So, as long as \( \E[x_i \varepsilon_i] \) we will get consistency of the LS estimator for \(\beta_0\)
+		\item Which exogeneity assumption we invoke will affect how we can interpret our estimates.
+		\begin{itemize}
+			\item If we assume independence between errors and covariates (as in an RCT), then we can give a strong causal interpretation to the coefficients being estimated
+			\item If we use the conditional mean 0 assumption, then the coefficients are only causal inasmuch as we can parametrically model the CEF
+			\item If we use the 0 covariance assumption, then we can only interpret the coefficients as those of the best linear approximation to the CEF
+		\end{itemize}
+	\end{itemize}
+	
+\end{frame}
+
+\begin{frame}{Discussion}
+	
+	Other topics discussed in this class included:
+	\begin{itemize}
+		\item The dispute between those who are comfortable with the ``best linear approximation'' interpretation and use it to justify specification of a linear model, as opposed to those who think that any linear model is fundamentally misspecified and think it's better to specify a non-linear (e.g. logit, probit) model when you know that the truth is not linear
+		\item The ``principle of correspondence'' and why we even bother with thinking about the finite sample properties and normalit of a LS model when we get almost all the same properties asymptotically
+		\begin{itemize}
+			\item One answer was that large sample approximations very often lead to the same inferences as if the finite samples was assumed to follow a normal distribution
+		\end{itemize}
+	\end{itemize}
+	
+\end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Next Lecture: Topics and Readings}
