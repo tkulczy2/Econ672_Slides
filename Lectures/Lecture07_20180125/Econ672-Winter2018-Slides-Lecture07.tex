@@ -75,6 +75,13 @@
 	\end{frame}
 }
 
+\newcommand{\p}{\mathbb{P}}
+\newcommand{\Cov}{\mathbb{C}ov}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\V}{\mathbb{V}}
+\newcommand{\indep}{\rotatebox[origin=c]{90}{$\models$}}
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -89,28 +96,89 @@
 \section{Introduction}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}{[Intro Heading]}
-    \begin{enumerate}
-		\item Intro item 1
-		\item Intro item 2
-	\end{enumerate}
+\begin{frame}{Introduction}
+    \begin{itemize}
+		\item Last lecture:
+	    \begin{itemize}
+			\item GLS
+			\item Intro to LS Asymptotics
+		\end{itemize}
+		\item This lecture:
+	    \begin{itemize}
+			\item More LS Asymptotics
+		\end{itemize}
+	\end{itemize}
 \end{frame}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{[Major Topic]}
+\section{Asymptotic Properties of LS}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}{Topic Heading}
+\begin{frame}{Consistency}
 
     \begin{itemize}
-		\item Topic point a
-		\item Topic point b
+		\item Our standard set-up
+		\[ \hat{\beta}_{LS} = \beta_0 + \left( \frac{1}{n} \sum_{i=1}^{n} x_i x_i' \right)^{-1} \left( \frac{1}{n} \sum_{i=1}^{n} x_i \varepsilon_i \right) = \beta_0 + \left( \E[ x_i x_i'] \right)^{-1} \left( \E[ x_i \varepsilon_i ] \right) + o_{\p}(1) \]
+		\item The second equality requires regularity conditions
+		\item ``Weak instrument'' type problems involve the denominator converging in probability to 0
 	\end{itemize}
-	Topic summary sentence.
 	
 \end{frame}
 
+\begin{frame}{Asymptotic Distribution}
+	
+	\begin{itemize}
+		\item By centering and scaling, we get:
+		\[ \sqrt{n} \left( \hat{\beta}_{LS} - \beta_0 \right) = \sqrt{n} (X'X)^{-1}X'\varepsilon =  \left( \frac{1}{n} \sum_{i=1}^{n} x_i x_i' \right)^{-1} \left( \frac{1}{\sqrt{n}} \sum_{i=1}^{n} x_i \varepsilon_i \right) \]
+		\item Where
+		\[ \frac{1}{n} \sum_{i=1}^{n} x_i x_i' \to_p \E[x_i x_i'], \;\; \frac{1}{\sqrt{n}} \sum_{i=1}^{n} x_i \varepsilon_i \to_d \mathcal{N} (0, \V[x_i\varepsilon_i]) \]
+		\item Then
+		\[ \sqrt{n} \left( \hat{\beta}_{LS} - \beta_0 \right) \to_d \mathcal{N} (0, H_0^{-1} V_0 H_0^{-1}) \]
+		\item Where
+		\[ H_0 = \E[x_i x_i'], \;\; V_0 = \V[x_i \varepsilon_i] = \E[x_i x_i' \E[\varepsilon_i^2|x_i]], \;\; \E[\varepsilon_i^2|x_i] = \sigma^2(x_i) \]
+	\end{itemize}
+	
+\end{frame}
+
+\begin{frame}{Inference under Homoskedasticity}
+	
+	\begin{itemize}
+		\item If we assume heteroskedasticity (\( \sigma^2(x_1) = \sigma^2 \)), then we get \( V_0 = \sigma^2 H_0 \) and the asymptotic variance of \(\hat{\beta}_{LS} \) simplifies.
+		\item We can then standardize as follows:
+		\[ \left( \frac{\sigma^2 H_0}{n} \right)^{-1/2} \left( \hat{\beta}_{LS} - \beta_0 \right) \to_d \mathcal{N} (0, I_d) \]
+		\item Which means we can use the following plug-in estimates to conduct asymptotic inference:
+		\[ \hat{H} = \frac{1}{n} \sum_{i=1}^{n} x_i x_i', \;\; \hat{\sigma}^2 \frac{1}{n} \sum_{i=1}^{n} \hat{\varepsilon}_i^2 \]
+		\item The problem here is that \( \hat{\sigma}^2 \), although consistent, is biased for \( \sigma^2 \), because it is not scaled by the appropriate (finite sample) degrees of freedom. This is because we derived the asymptotic distribution first (disregarding d.o.f.), and then determined the sample analogues that we needed to conduct inference.
+		\[ H_0 = \E[x_i x_i'], \;\; V_0 = \V[x_i \varepsilon_i] = \E[x_i x_i' \E[\varepsilon_i^2|x_i]], \;\; \E[\varepsilon_i^2|x_i] = \sigma^2(x_i) \]
+	\end{itemize}
+	
+\end{frame}
+
+
+\begin{frame}{``Robust'' Standard Errors}
+	
+	\begin{itemize}
+		\item In general, our estimated asymptotic variance matrix will be \(\hat{\Sigma} = \hat{H}^{-1} \hat{V} \hat{H}^{-1} \) simplifies. How you correct for heteroskedasticity is a matter of how you calculate \( \hat{V} \).
+		\item Although there is no theoretical motivation, Stata's default uses:
+		\[ \hat{V} = \hat{\E} [x_i x_i' (y_i - x_i' \hat{\beta}_{LS})^2] \]
+		\item The following estimator is unbiased under homoskedasticity (\(\sigma^2(x_i) = \sigma^2 \Rightarrow \E[\hat{V}_{HC2}] = V_0 \)):
+		\[ \hat{V}_{HC2} = \frac{1}{n} \sum_{i=1}^{n} x_i x_i' \frac{1}{p_{ii}} (y_i - x_i' \hat{\beta}_{LS})^2 \;\; (p_{ii} = [P_X]_{ii}) \]
+	\end{itemize}
+	
+\end{frame}
+
+\begin{frame}{``Robust'' Standard Errors}
+	
+	\begin{itemize}
+		\item (don't remember the motivation for the following)
+		\[ \hat{V}_{HC3} = \frac{1}{n} \sum_{i=1}^{n} x_i x_i' \frac{1}{p_{ii}^2} (y_i - x_i' \hat{\beta}_{LS})^2 \Rightarrow \hat{\Sigma}_{HC3} = \frac{n-1}{n} \sum_{i=1}^n \left( \hat{\beta}_{(i)} - \hat{\beta}_{LS} \right) \left( \hat{\beta}_{(i)} - \hat{\beta}_{LS} \right)' \]
+		\item The following estimator is biased upward (so will produce standard errors that are always conservative, i.e. ``too large'')
+		\[ \hat{\Sigma}_{JACK} = \frac{n-1}{n} \sum_{i=1}^n \left( \hat{\beta}_{(i)} - \hat{\beta}_{(\cdot)} \right) \left( \hat{\beta}_{(i)} - \hat{\beta}_{(\cdot)} \right)' \]
+		
+	\end{itemize}
+	
+\end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Next Lecture: Topics and Readings}
